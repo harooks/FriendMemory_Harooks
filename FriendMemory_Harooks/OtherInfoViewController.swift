@@ -8,10 +8,15 @@
 import UIKit
 import RealmSwift
 
+//ここは画像以外のデータ以外を入力して保存するViewController だよ！
 class OtherInfoViewController: UIViewController {
-
     
     @IBOutlet weak var nameTextField: UITextField!
+    
+    //ストーリボードは前作ってくれてたストーリーボードそのまんまだよ！
+    //やりたいこと：性別と関係がボタンになってたので押したボタンによってIntが変わるようにするよ！
+    //なんで Int型で保存するかというと文字より簡単だから！あとで表示する時に「もし gender が 0 だったらlabel.text = ”男”にする」と設定できるよ！わかるかな？？
+    //そんな難しくないので複雑に考えないように！じゃあコードを書いてみよう！最初の変数は宣言は残しておいたよ！
     
     var gender: Int = 0
     var relation: Int = 0
@@ -26,45 +31,49 @@ class OtherInfoViewController: UIViewController {
     }
     
     @IBAction func maleButton(_ sender: Any) {
-        gender = 0
+        
     }
     
     @IBAction func femaleButton(_ sender: Any) {
-        gender = 1
+        
     }
     
     @IBAction func otherGenderButton(_ sender: Any) {
-        gender = 2
+        
     }
     
     @IBAction func schoolFriend(_ sender: Any) {
-        relation = 0
+        
     }
     
     @IBAction func activityFriend(_ sender: Any) {
-        relation = 1
+        
     }
     
     @IBAction func familyFriend(_ sender: Any) {
-        relation = 2
+        
     }
     
     var imageURL = String()
     
     @IBAction func register(_ sender: Any) {
         
-        var person = Person()
-        
-        let savedId = saveData.object(forKey: "userId")
+        //ここでさっき FaceViewControllderでuserdefualtに保存した id を取り出して、saveId という変数に入れるよ！左辺を完成させよう！
+        let savedId =
 
+        //targetFriend は上で取ってきた id と同じ id の personオブジェクトだよ！.filterで id == savedId で判別してるよ！
+        //ここも説明不足かもだから https://zenn.dev/men_so/articles/02e89dbb561fd4 読んでね！この間も送ったけど、ここのhttps://zenn.dev/men_so/articles/02e89dbb561fd4の部分を参考にしてるよ！
         let targetFriend = realm.objects(Person.self).filter("id == %@", savedId).first
-        print("saved id here is :  \(savedId)")
+        //読んでもわからなかったら聞いてね！
+        
+        
         
         do { try realm.write {
-          
-            targetFriend?.gender = gender
-            targetFriend?.relation = relation
-            targetFriend?.name = nameTextField.text ?? "no name"
+            //こんなかにさっき FaceViewControllerで画像pathのURLを保存したみたいに性別、関係、名前を保存してみよう！
+            //名前だけIntにできなかったから入力した文字そのまま保存しちゃっていいよ！
+            
+            
+            
             
         }
         } catch {

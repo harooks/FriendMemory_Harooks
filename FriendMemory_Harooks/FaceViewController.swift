@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 import RealmSwift
-class FaceViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate  {
+class FaceViewController: UIViewController {
 @IBOutlet weak var backgroundImageView: UIImageView!
     
     @IBOutlet weak var backgroundView: UIView!
@@ -18,6 +18,7 @@ var mouthimageNameArray:[String] = ["niko.png","henozi.png","ookuti.png"]
 var hairimageNameArray:[String] = ["tanpatu.png","bobu.png","poni-te-ru.png","tuinte-ru.png"]
 let realm = try! Realm()
 
+//userdefualtの宣言！覚えてなかったらmemoアプリを参考にしよう！
 let saveData = UserDefaults.standard
     
     
@@ -117,10 +118,12 @@ override func viewDidLoad() {
     
     @IBAction func saveBtn(_ sender: Any) {
         
+        //これは Person型のオブジェクトだよ！ let number = Int() と同じ概念！
         let person = Person()
         
         do{
-            //スタンプを押した画像のスクリーンショットを撮る
+            //スタンプを押した画像のスクリーンショットを撮るコード。詳しい意味は理解しなくていいよ。私もコピペしただけww
+            //ここはスタンプの教科書と同じだよ！
             UIGraphicsBeginImageContextWithOptions(backgroundView.bounds.size, false, 0.0)
             let context: CGContext = UIGraphicsGetCurrentContext()!
             context.translateBy(x: -backgroundView.frame.origin.x, y: -backgroundView.frame.origin.y)
@@ -130,20 +133,30 @@ override func viewDidLoad() {
             
 
             
-            
+            //ここは前にのんが書いてきてくれた画像をローカルに保存してるメソッドだよ！下のほうに書いてあるよ
             createLocalDataFile()
-            let pngImageData = capturedImage.pngData()//faceImage.image!.pngData()
             
+            
+            //ここでイメージデータをローカルに保存してあるところのpathに変換してるよ！pathはわかるかな？
+            let pngImageData = capturedImage.pngData()
             try pngImageData!.write(to: documentDirectoryFileURL)
             
-            try person.facePic = documentDirectoryFileURL.absoluteString
+            //documentDirectoryFileURL.absoluteString は画像のpathだよ。
+            print("attempt url: \(documentDirectoryFileURL)")
+            //でコンソールに出てきたURLをブラウザで開くと多分作った写真が出てくるよ！で、その写真をrealmに保存するよ！
+            //realmに保存する時はさっき作ったPerson型（クラス）のオブジェクトの中に保存するんだったね！Personクラスを見てどこの値に保存するか考えてみよう！〇〇はどうなるかな？
+            try 〇〇 = documentDirectoryFileURL.absoluteString
             
+            //ここで id が毎回変わるように最大idに1を毎回足してるよ！maxId　の意味は Person.swift ファイルに書いてあるよ！
             person.id = person.maxId + 1
             
-            print("attempt url: \(person.facePic)")
-            print("attempt url: \(documentDirectoryFileURL)")
-            saveData.set(person.id, forKey: "userId")
-            print("person id is \(person.id)")
+            //この間のスクールでしたuserdefaultの説明は覚えてるかな？ 22行目にuserdefaultのオブジェクトが宣言してあるよ！
+            //この下に22行目に宣言したuserdefault のオブジェクト(saveData）に id を保存しよう！保存の仕方が覚えてなかったらメモ教科書を参考にしよう！
+            
+            
+            //書けたかな？一行だけだからすぐ終わるはず！で、なんでここで id を保存するかというと次の画面にいく時に、今保存したid(key)と同じidの中に他のデータも保存しなきゃいけないからだよ！もしわからなかったら聞いて！！ちょっと説明下手かもだから！
+            
+            //ここでやっと person を realm に保存するよ！けど今はまだ画像のpathしか入ってないよね！他のデータは次の画面で行うよ！
             try! realm.write{realm.add(person)}
             
             
@@ -173,43 +186,6 @@ let filePath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDoma
             }
         }
 }
-
-extension UIView {
-
-    /// Create image snapshot of view.
-    ///
-    /// - Parameters:
-    ///   - rect: The coordinates (in the view's own coordinate space) to be captured. If omitted, the entire `bounds` will be captured.
-    ///   - afterScreenUpdates: A Boolean value that indicates whether the snapshot should be rendered after recent changes have been incorporated. Specify the value false if you want to render a snapshot in the view hierarchy’s current state, which might not include recent changes. Defaults to `true`.
-    ///
-    /// - Returns: The `UIImage` snapshot.
-
-    func snapshot(of rect: CGRect? = nil, afterScreenUpdates: Bool = true) -> UIImage {
-        return UIGraphicsImageRenderer(bounds: rect ?? bounds).image { _ in
-            drawHierarchy(in: bounds, afterScreenUpdates: afterScreenUpdates)
-        }
-    }
-    
-    func getImage() -> UIImage{
-
-           // キャプチャする範囲を取得.
-           let rect = self.bounds
-
-           // ビットマップ画像のcontextを作成.
-           UIGraphicsBeginImageContextWithOptions(rect.size, false, 0.0)
-           let context: CGContext = UIGraphicsGetCurrentContext()!
-
-           // 対象のview内の描画をcontextに複写する.
-           self.layer.render(in: context)
-
-           // 現在のcontextのビットマップをUIImageとして取得.
-           let capturedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-
-           // contextを閉じる.
-           UIGraphicsEndImageContext()
-
-           return capturedImage
-       }
 }
 
 

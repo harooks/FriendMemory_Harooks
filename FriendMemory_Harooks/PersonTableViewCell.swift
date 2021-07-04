@@ -9,6 +9,8 @@ import UIKit
 
 class PersonTableViewCell: UITableViewCell {
     
+    //セルのデザインはテキトーに私がつくちゃったけど変えていいよ！
+    
     @IBOutlet weak var personImage: UIImageView!
     
     @IBOutlet weak var personName: UILabel!
